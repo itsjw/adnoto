@@ -8,7 +8,7 @@ Either `yarn add adnoto` or `npm install adnoto --save`.
 
 ## Usage
 
-```
+```javascript
   // Add the library
   const adnoto = require('./index')
 
@@ -59,6 +59,10 @@ Dispatches an action request to change the state. It's recommended to use an obj
 ### addReducer(function)
 
 Adds a reducer to the state, needs to be a named function.
+
+### sideEffect(function)
+
+Adds a listener function that receives the dispatch action instead of the state results. Very handy if you want to do, well, side effects (e.g. async operations etcetera).
 
 ### reset()
 

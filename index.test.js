@@ -7,7 +7,7 @@ const Promise = require('bluebird')
 /**
  * Internal dependencies
  */
-const { reset, subscribe, dispatch, addReducer, initialReducers } = require('./index')
+const { reset, subscribe, dispatch, addReducer, initialReducers, sideEffect } = require('./index')
 
 function defer () {
   let resolve
@@ -91,6 +91,19 @@ test('initialReducers', t => {
   )
 
   dispatch()
+
+  return promise
+})
+
+test('sideEffect', t => {
+  const { resolve, promise } = defer()
+
+  sideEffect(action => {
+    t.deepEqual(action, { some: 'action' })
+    resolve()
+  })
+
+  dispatch({ some: 'action' })
 
   return promise
 })

@@ -9,6 +9,8 @@ const assign = require('lodash/fp/assign')
 const reduce = require('lodash/reduce')
 
 const listeners = []
+const effects = []
+
 let reducers = Object.create(null)
 
 // State always needs to be frozen, even if it is initially empty
@@ -16,7 +18,16 @@ let state = freeze(Object.create(null))
 
 const isNotReducer = func => (!func || typeof func !== 'function' || !func.name)
 
+/**
+ * Dispatches an action, triggers the side effects, reducers and listeners.
+ *
+ * @param Mixed action Action that needs dispatching
+ */
 const dispatch = action => {
+  forEach(effects, effect => {
+    effect(action)
+  })
+
   // Reducers for each state[reducer], action
   state = freeze(reduce(reducers, (result, reducer, key) => {
     result[key] = reducer(state[key], action)
@@ -29,6 +40,11 @@ const dispatch = action => {
   })
 }
 
+/**
+ * Adds a reducer to the state.
+ *
+ * @param Function func Reducer function
+ */
 const addReducer = (func) => {
   if (isNotReducer(func)) throw Error('Not a reducer function.')
 
@@ -41,6 +57,11 @@ const addReducer = (func) => {
   forEach(listeners, listen => { listen(state) })
 }
 
+/**
+ * Sets up the initial reducers, if wanted.
+ *
+ * @param Function, ...Function One or more reducer functions
+ */
 function initialReducers () {
   const result = reduce(arguments, (result, reducer) => {
     if (isNotReducer(reducer)) throw Error('Not a reducer function.')
@@ -70,8 +91,19 @@ const subscribe = (func) => {
  */
 const reset = () => {
   state = freeze(Object.create(null))
-  listeners.length = 0
   reducers = Object.create(null)
+
+  listeners.length = 0
+  effects.length = 0
 }
 
-module.exports = { subscribe, dispatch, addReducer, initialReducers, reset }
+/**
+ * Registers a side effect function.
+ *
+ * @param Function func Side effect function
+ */
+const sideEffect = (func) => {
+  effects.push(func)
+}
+
+module.exports = { subscribe, dispatch, addReducer, initialReducers, reset, sideEffect }
