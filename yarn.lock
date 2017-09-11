@@ -1280,9 +1280,9 @@ function-name-support@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/function-name-support/-/function-name-support-0.2.0.tgz#55d3bfaa6eafd505a50f9bc81fdf57564a0bb071"
 
-functional-freeze@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/functional-freeze/-/functional-freeze-1.0.0.tgz#61706a3db0dc1e8aa0dbe4a38504a1a3dae75afd"
+functional-freeze@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/functional-freeze/-/functional-freeze-1.0.1.tgz#337a52f170132236ccaa3f7f75bb4fa7eefeec42"
   dependencies:
     ava "^0.22.0"
     nyc "^11.2.1"

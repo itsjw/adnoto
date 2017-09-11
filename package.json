@@ -1,6 +1,6 @@
 {
   "name": "adnoto",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Ultra-light library to implement observer state management.",
   "main": "index.min.js",
   "repository": "git@github.com:bcallaars/adnoto.git",
@@ -8,12 +8,12 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "functional-freeze": "^1.0.0",
+    "functional-freeze": "^1.0.1",
     "lodash": "^4.17.4"
   },
   "scripts": {
     "test": "nyc ava index.test.js",
-    "minify": "uglifyjs index.js > index.min.js"
+    "minify": "uglifyjs --ecma 5 index.js > index.min.js"
   },
   "devDependencies": {
     "ava": "^0.22.0",
