@@ -10,7 +10,7 @@ Either `yarn add adnoto` or `npm install adnoto --save`.
 
 ```javascript
   // Add the library
-  const adnoto = require('./index')
+  const adnoto = require('adnoto')
 
   // Define some unique constants
   const ADD_USER = Symbol('ADD_USER')
