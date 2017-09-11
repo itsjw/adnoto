@@ -64,6 +64,10 @@ Adds a reducer to the state, needs to be a named function.
 
 Adds a listener function that receives the dispatch action instead of the state results. Very handy if you want to do, well, side effects (e.g. async operations etcetera).
 
+### select(function)
+
+Provides functionality to select keys from the current state. The argument function is the current state object, and the return value of that function will be parsed back. 
+
 ### reset()
 
 Removes _all_ reducers, state and listeners.

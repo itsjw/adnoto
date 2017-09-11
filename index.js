@@ -100,10 +100,18 @@ const reset = () => {
 /**
  * Registers a side effect function.
  *
- * @param Function func Side effect function
+ * @param Function func Side effect function, receives dispatch action argument
  */
-const sideEffect = (func) => {
+const sideEffect = func => {
   effects.push(func)
 }
 
-module.exports = { subscribe, dispatch, addReducer, initialReducers, reset, sideEffect }
+/**
+ * Selects from the state.
+ *
+ * @param  Function func Select function, receives current state
+ * @return Mixed         Whatever is returned from func
+ */
+const select = func => func(state)
+
+module.exports = { subscribe, dispatch, addReducer, initialReducers, reset, sideEffect, select }
