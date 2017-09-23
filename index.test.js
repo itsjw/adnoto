@@ -26,12 +26,16 @@ test('subscribe', t => {
 
   const { promise, resolve } = defer()
 
+  addReducer(function test (state = null, action) {
+    if (action === 'test') return 'super!'
+  })
+
   subscribe(newState => {
-    t.deepEqual(newState, {})
+    t.deepEqual(newState, { test: 'super!' })
     resolve()
   })
 
-  dispatch()
+  dispatch('test')
 
   return promise
 })
@@ -75,8 +79,15 @@ test('initialReducers', t => {
   })
 
   // Initial reducers
-  function some () { return 'state' }
-  function another () { return { state: 'object' } }
+  function some (state, action) {
+    if (action) return 'state'
+    return state
+  }
+
+  function another (state, action) {
+    if (action) return { state: 'object' }
+    return state
+  }
 
   t.throws(() => {
     initialReducers(
@@ -90,7 +101,7 @@ test('initialReducers', t => {
     another
   )
 
-  dispatch()
+  dispatch('test')
 
   return promise
 })

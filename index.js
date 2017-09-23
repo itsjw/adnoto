@@ -5,6 +5,7 @@
  */
 const freeze = require('functional-freeze')
 const forEach = require('lodash/forEach')
+const isEqual = require('lodash/isEqual')
 const assign = require('lodash/fp/assign')
 const reduce = require('lodash/reduce')
 
@@ -29,15 +30,20 @@ const dispatch = action => {
   })
 
   // Reducers for each state[reducer], action
-  state = freeze(reduce(reducers, (result, reducer, key) => {
+  const newState = freeze(reduce(reducers, (result, reducer, key) => {
     result[key] = reducer(state[key], action)
     return result
   }, {}))
 
-  // Listeners for each
-  forEach(listeners, listen => {
-    listen(state)
-  })
+  // Only update the listeners if the state is dirty
+  if (!isEqual(newState, state)) {
+    state = newState
+
+    // Listeners for each
+    forEach(listeners, listen => {
+      listen(state)
+    })
+  }
 }
 
 /**
