@@ -8,6 +8,7 @@ const forEach = require('lodash/forEach')
 const isEqual = require('lodash/isEqual')
 const assign = require('lodash/fp/assign')
 const reduce = require('lodash/reduce')
+const isPlainObject = require('lodash/isPlainObject')
 
 const listeners = []
 const effects = []
@@ -17,7 +18,7 @@ let reducers = Object.create(null)
 // State always needs to be frozen, even if it is initially empty
 let state = freeze(Object.create(null))
 
-const isNotReducer = func => (!func || typeof func !== 'function' || !func.name)
+const isNotReducer = func => (typeof func !== 'function')
 
 /**
  * Dispatches an action, triggers the side effects, reducers and listeners.
@@ -47,36 +48,21 @@ const dispatch = action => {
 }
 
 /**
- * Adds a reducer to the state.
- *
- * @param Function func Reducer function
- */
-const addReducer = (func) => {
-  if (isNotReducer(func)) throw Error('Not a reducer function.')
-
-  // Add reducer with key to state
-  reducers[func.name] = func
-
-  state = freeze(assign(state, { [func.name]: func() }))
-
-  // Listeners for each
-  forEach(listeners, listen => { listen(state) })
-}
-
-/**
  * Sets up the initial reducers, if wanted.
  *
  * @param Function, ...Function One or more reducer functions
  */
-function initialReducers () {
-  const result = reduce(arguments, (result, reducer) => {
+function initializeReducers () {
+  if (!isPlainObject(arguments[0])) throw Error('Needs plain object as first argument.')
+
+  const result = reduce(arguments[0], (result, reducer, name) => {
     if (isNotReducer(reducer)) throw Error('Not a reducer function.')
 
-    result.state[reducer.name] = reducer()
-    result.reducers[reducer.name] = reducer
+    result.state[name] = reducer()
+    result.reducers[name] = reducer
 
     return result
-  }, { state: Object.create(null), reducers: Object.create(null) })
+  }, { state: Object.create(null), reducers })
 
   reducers = result.reducers
   state = freeze(result.state)
@@ -120,4 +106,4 @@ const sideEffect = func => {
  */
 const select = func => func(state)
 
-module.exports = { subscribe, dispatch, addReducer, initialReducers, reset, sideEffect, select }
+module.exports = { subscribe, dispatch, initializeReducers, reset, sideEffect, select }

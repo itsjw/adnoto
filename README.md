@@ -48,17 +48,13 @@ Either `yarn add adnoto` or `npm install adnoto --save`.
 
 Adds a listener function to receive state changes.
 
-### initializeReducers(function, ...function)
+### initializeReducers({ function, ...function })
 
-Initializes reducers. Each named function will be added to the state.
+Initializes new reducers into the state. Requires a plain object with reducers.
 
 ### dispatch(object)
 
 Dispatches an action request to change the state. It's recommended to use an object with a `type` property that defines the action. 
-
-### addReducer(function)
-
-Adds a reducer to the state, needs to be a named function.
 
 ### sideEffect(function)
 
@@ -74,11 +70,7 @@ Removes _all_ reducers, state and listeners.
 
 ## The reducer function
 
-In order to function correctly, reducer functions need a specific layout. First of all, reducer functions need to be named functions, as the name of the function is the key in the state.
-
-For example a `function testReducer () {}` will be identified in the state object as `{ testReducer: /* state */ }`. 
-
-Each reducer with the **same name**, will overwrite the previous reducer, there is no error handling here, as it's assumed this is the wished course of action.
+In order to function correctly, reducer functions need a specific layout. Each reducer with the **same key**, will overwrite the previous reducer, there is no error handling here, as it's assumed this is the wished course of action.
 
 Secondly, reducers need to return a new state object, in all cases when triggered. If the state is the same as the previous state, then that's fine, as long as they return a value.
 

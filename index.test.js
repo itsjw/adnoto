@@ -7,7 +7,7 @@ const Promise = require('bluebird')
 /**
  * Internal dependencies
  */
-const { select, reset, subscribe, dispatch, addReducer, initialReducers, sideEffect } = require('./index')
+const { select, reset, subscribe, dispatch, initializeReducers, sideEffect } = require('./index')
 
 function defer () {
   let resolve
@@ -26,9 +26,9 @@ test('subscribe', t => {
 
   const { promise, resolve } = defer()
 
-  addReducer(function test (state = null, action) {
+  initializeReducers({ test: function test (state = null, action) {
     if (action === 'test') return 'super!'
-  })
+  } })
 
   subscribe(newState => {
     t.deepEqual(newState, { test: 'super!' })
@@ -40,36 +40,11 @@ test('subscribe', t => {
   return promise
 })
 
-test('addReducer', t => {
+test('initializeReducers', t => {
   reset()
 
   const { promise, resolve } = defer()
-
-  subscribe(newState => {
-    t.deepEqual(newState, { test: { hello: 'world' } })
-
-    resolve()
-  })
-
-  t.throws(() => {
-    addReducer(function () {})
-  }, Error)
-
-  addReducer(function test (currentState, action) {
-    t.deepEqual(currentState, undefined)
-    t.deepEqual(action, undefined)
-
-    return { hello: 'world' }
-  })
-
-  return promise
-})
-
-test('initialReducers', t => {
-  reset()
-
-  const { promise, resolve } = defer()
-  const expectedState = { some: 'state', another: { state: 'object' } }
+  const expectedState = { some: 'action-state', another: { state: 'object' } }
 
   subscribe(newState => {
     t.true(Object.isFrozen(newState))
@@ -80,26 +55,18 @@ test('initialReducers', t => {
 
   // Initial reducers
   function some (state, action) {
-    if (action) return 'state'
-    return state
+    if (action) return 'action-state'
+    return 'state'
   }
 
   function another (state, action) {
-    if (action) return { state: 'object' }
-    return state
+    return { state: 'object' }
   }
 
-  t.throws(() => {
-    initialReducers(
-      function () {},
-      some
-    )
-  }, Error)
-
-  initialReducers(
+  initializeReducers({
     some,
     another
-  )
+  })
 
   dispatch('test')
 
@@ -125,10 +92,10 @@ test('select', t => {
   function some () { return { some: 'value' } }
   function another () { return { what: 'a test' } }
 
-  initialReducers(
+  initializeReducers({
     some,
     another
-  )
+  })
 
   const state = select(function (state) {
     t.deepEqual(state, { some: { some: 'value' }, another: { what: 'a test' } })
