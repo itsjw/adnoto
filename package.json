@@ -1,6 +1,6 @@
 {
   "name": "adnoto",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Ultra-light library to implement observer state management.",
   "main": "index.min.js",
   "repository": "git@github.com:bcallaars/adnoto.git",
