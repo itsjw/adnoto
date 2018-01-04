@@ -86,4 +86,4 @@ Thirdly the arguments to the reducer function are as follows: `state`, `action`.
 MIT
 
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/AEMubo6XgXjBRq7V3urxNFC3/bcallaars/adnoto'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/AEMubo6XgXjBRq7V3urxNFC3/bcallaars/adnoto.svg' /></a>
+
